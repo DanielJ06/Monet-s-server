@@ -15,7 +15,9 @@ routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
-routes.post('/wallet', WalletController.store);
 routes.get('/wallet', WalletController.index);
+routes.post('/wallet', WalletController.store);
+routes.put('/wallet/:id', WalletController.update);
+routes.delete('/wallet/:id', WalletController.delete);
 
 export default routes;
