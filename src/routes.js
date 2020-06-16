@@ -16,4 +16,3 @@ routes.put('/users', UserController.update);
 
 export default routes;
 
- 
