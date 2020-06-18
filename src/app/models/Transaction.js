@@ -8,6 +8,10 @@ class Transaction extends Model {
             type: {
                 type: Sequelize.ENUM,
                 values: ['deposit', 'withdraw']
+            },
+            installments: {
+                type: Sequelize.ENUM,
+                values: ['fixed', 'unique']
             }
         }, {
             sequelize,
