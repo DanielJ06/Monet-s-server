@@ -4,6 +4,28 @@ import Transaction from "../models/Transaction";
 import Wallet from "../models/Wallet";
 
 class TransactionController {
+    async index(req, res) {
+        const { walletId } = req.query;
+        const wallet = await Wallet.findByPk(walletId);
+
+        if (!wallet) {
+            return res.status(401).json({ error: 'Wallet not found' });
+        }
+
+        const transactions = await Transaction.findAll({
+            where: { wallet_id: walletId },
+            include: [
+                {
+                    model: Wallet,
+                    as: 'wallet',
+                    attributes: ['id', 'title', 'description']
+                }
+            ]
+        })
+
+        return res.json(transactions);
+    }
+
     async store(req, res) {
         const validationSchema = Yup.object().shape({
             title: Yup.string().required(),
@@ -35,6 +57,46 @@ class TransactionController {
         });
 
         return res.json(transaction);
+    }
+
+    async update(req, res) {
+        const validationSchema = Yup.object().shape({
+            title: Yup.string(),
+            value: Yup.number(),
+            type: Yup.mixed().oneOf(['deposit', 'withdraw']),
+        });
+
+        if(!(await validationSchema.isValid(req.body))) {
+            return res.status(400).json({ error: 'Validation fails' })
+        }
+
+        const { id } = req.params;
+        const transaction = await Transaction.findByPk(id);
+
+        if (!transaction) {
+            return res.status(400).json({ error: 'Transaction does not exists' })
+        }
+
+        const { title, value, type } = await transaction.update(req.body);
+
+        return res.json({
+            title,
+            value,
+            type
+        });
+    }
+
+    async delete(req, res) {
+        const { id } = req.params;
+        const transaction = await Transaction.findByPk(id);
+
+        if (!transaction) {
+            return res.status(401).json({ error: 'Transaction not found' });
+        }
+
+        await transaction.destroy();
+
+        return res.json({ Success: 'Transaction has been deleted' })
     }
 }
 
