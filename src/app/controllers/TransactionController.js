@@ -65,8 +65,6 @@ class TransactionController {
 
         if (installments === 'fixed') {
             job.start();
-        } else {
-            job.stop();
         }
 
         const transaction = await Transaction.create({
