@@ -3,10 +3,11 @@ import User from '../models/User';
 
 class WalletController {
     async store(req, res) {
-        const { title, description } = req.body;
+        const { title, description, total } = req.body;
         const wallet = await Wallet.create({
             title,
             description,
+            total,
             user_id: req.userId
         });
 
@@ -16,7 +17,7 @@ class WalletController {
     async index(req, res) {
         const wallets = await Wallet.findAll({ 
             where: { user_id: req.userId },
-            attributes: ['id', 'title', 'description'],
+            attributes: ['id', 'title', 'description', 'total'],
             include: [{ 
                 model: User,
                 as: 'user',

@@ -67,6 +67,14 @@ class TransactionController {
             job.start();
         }
 
+        if (type === 'deposit') {
+            const newValue = walletIsValid.total + value;
+            await walletIsValid.update({ total: newValue });
+        } else {
+            const newValue = walletIsValid.total - value;
+            await walletIsValid.update({ total: newValue })
+        }
+
         const transaction = await Transaction.create({
             title,
             value,

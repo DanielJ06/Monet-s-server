@@ -5,6 +5,7 @@ class Wallet extends Model {
         super.init({
             title: Sequelize.STRING,
             description: Sequelize.STRING,
+            total: Sequelize.DOUBLE,
         }, {
             sequelize,
         });
