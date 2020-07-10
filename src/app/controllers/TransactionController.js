@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import { CronJob } from 'cron';
+import { subWeeks } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Transaction from "../models/Transaction";
 import Wallet from "../models/Wallet";
@@ -15,6 +17,38 @@ class TransactionController {
 
         const transactions = await Transaction.findAll({
             where: { wallet_id: walletId },
+            order: [["created_at", "DESC"]],
+            include: [
+                {
+                    model: Wallet,
+                    as: 'wallet',
+                    attributes: ['id', 'title', 'description']
+                }
+            ]
+        })
+
+        return res.json(transactions);
+    }
+
+    async weekTransactions(req, res) {
+        const now = new Date();
+        const lastWeek = subWeeks(now, 1);
+        const { walletId } = req.query;
+        const wallet = await Wallet.findByPk(walletId);
+
+        if (!wallet) {
+            return res.status(401).json({ error: 'Wallet not found' });
+        }
+
+        const transactions = await Transaction.findAll({
+            where: {
+                wallet_id: walletId,
+                createdAt: {
+                    [Op.between]: [lastWeek, now]
+                },
+            },
+            order: [["created_at", "DESC"]],
+            limit: 5,
             include: [
                 {
                     model: Wallet,
