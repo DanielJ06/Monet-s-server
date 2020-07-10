@@ -30,9 +30,7 @@ class TransactionController {
         return res.json(transactions);
     }
 
-    async weekTransactions(req, res) {
-        const now = new Date();
-        const lastWeek = subWeeks(now, 1);
+    async latestTransactions(req, res) {
         const { walletId } = req.query;
         const wallet = await Wallet.findByPk(walletId);
 
@@ -41,12 +39,7 @@ class TransactionController {
         }
 
         const transactions = await Transaction.findAll({
-            where: {
-                wallet_id: walletId,
-                createdAt: {
-                    [Op.between]: [lastWeek, now]
-                },
-            },
+            where: { wallet_id: walletId },
             order: [["created_at", "DESC"]],
             limit: 5,
             include: [
