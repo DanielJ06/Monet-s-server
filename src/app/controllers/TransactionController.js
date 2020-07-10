@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { CronJob } from 'cron';
 import { subWeeks } from 'date-fns';
 import { Op } from 'sequelize';
 
@@ -59,14 +58,13 @@ class TransactionController {
             title: Yup.string().required(),
             value: Yup.number().required(),
             type: Yup.mixed().oneOf(['deposit', 'withdraw']),
-            installments: Yup.mixed().oneOf(['fixed', 'unique']),
         });
 
         if(!(await validationSchema.isValid(req.body))) {
             return res.status(400).json({ error: 'Validation fails' })
         }
 
-        const { title, value, type, installments, wallet_id } = req.body;
+        const { title, value, type, wallet_id } = req.body;
 
         const walletIsValid = await Wallet.findOne({
             where: {
@@ -76,22 +74,6 @@ class TransactionController {
 
         if(!walletIsValid) {
             return res.status(401).json({ error: 'Wallet does not exists' })
-        }
-
-        let { minute='*', hour='*', day='*', month='*' } = req.body
-        const job = new CronJob(`0 ${minute} ${hour} ${day} ${month} *`, async () => {
-            const transaction = await Transaction.create({
-                title,
-                value,
-                type,
-                installments,
-                wallet_id
-            });
-            return transaction;
-        })
-
-        if (installments === 'fixed') {
-            job.start();
         }
 
         if (type === 'deposit') {
@@ -106,7 +88,6 @@ class TransactionController {
             title,
             value,
             type,
-            installments,
             wallet_id
         });
 
@@ -118,7 +99,6 @@ class TransactionController {
             title: Yup.string(),
             value: Yup.number(),
             type: Yup.mixed().oneOf(['deposit', 'withdraw']),
-            installments: Yup.mixed().oneOf(['fixed', 'unique']),
         });
 
         if(!(await validationSchema.isValid(req.body))) {
@@ -132,13 +112,12 @@ class TransactionController {
             return res.status(400).json({ error: 'Transaction does not exists' })
         }
 
-        const { title, value, type, installments } = await transaction.update(req.body);
+        const { title, value, type } = await transaction.update(req.body);
 
         return res.json({
             title,
             value,
             type,
-            installments,
         });
     }
 
