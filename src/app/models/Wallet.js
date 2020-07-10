@@ -1,22 +1,24 @@
 import Sequelize, { Model } from 'sequelize';
 
 class Wallet extends Model {
-    static init(sequelize) {
-        super.init({
-            title: Sequelize.STRING,
-            description: Sequelize.STRING,
-            total: Sequelize.DOUBLE,
-        }, {
-            sequelize,
-        });
+  static init(sequelize) {
+    super.init(
+      {
+        title: Sequelize.STRING,
+        description: Sequelize.STRING,
+        total: Sequelize.DOUBLE,
+      },
+      {
+        sequelize,
+      },
+    );
 
-        return this;
-    }
+    return this;
+  }
 
-    static associate(models) {
-        this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user'})
-    }
+  static associate(models) {
+    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+  }
 }
-
 
 export default Wallet;

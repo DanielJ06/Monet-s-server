@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import multer from 'multer';
 
 import SessionController from './app/controllers/SessionController';
