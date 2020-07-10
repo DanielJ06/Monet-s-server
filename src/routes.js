@@ -27,6 +27,7 @@ routes.delete('/wallet/:id', WalletController.delete);
 
 routes.get('/transaction', TransactionController.index);
 routes.get('/transaction/latest', TransactionController.latestTransactions);
+routes.get('/transaction/summary', TransactionController.summary);
 routes.post('/transaction', TransactionController.store);
 routes.put('/transaction/:id', TransactionController.update);
 routes.delete('/transaction/:id', TransactionController.delete);

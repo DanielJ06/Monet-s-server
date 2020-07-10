@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import { startOfYear, endOfYear, startOfMonth, endOfMonth } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Transaction from '../models/Transaction';
 import Wallet from '../models/Wallet';
@@ -49,6 +51,62 @@ class TransactionController {
     });
 
     return res.json(transactions);
+  }
+
+  async summary(req, res) {
+    const { filter, walletId } = req.query;
+
+    if (filter === 'month') {
+      const income = await Transaction.sum('value', {
+        where: {
+          wallet_id: walletId,
+          type: 'deposit',
+          createdAt: {
+            [Op.between]: [startOfMonth(new Date()), endOfMonth(new Date())],
+          },
+        },
+      });
+
+      const expense = await Transaction.sum('value', {
+        where: {
+          wallet_id: walletId,
+          type: 'withdraw',
+          createdAt: {
+            [Op.between]: [startOfMonth(new Date()), endOfMonth(new Date())],
+          },
+        },
+      });
+
+      return res.json({
+        income,
+        expense,
+      });
+    }
+
+    const income = await Transaction.sum('value', {
+      where: {
+        wallet_id: walletId,
+        type: 'deposit',
+        createdAt: {
+          [Op.between]: [startOfYear(new Date()), endOfYear(new Date())],
+        },
+      },
+    });
+
+    const expense = await Transaction.sum('value', {
+      where: {
+        wallet_id: walletId,
+        type: 'withdraw',
+        createdAt: {
+          [Op.between]: [startOfYear(new Date()), endOfYear(new Date())],
+        },
+      },
+    });
+
+    return res.json({
+      income,
+      expense,
+    });
   }
 
   async store(req, res) {
