@@ -178,11 +178,24 @@ class TransactionController {
   }
 
   async delete(req, res) {
-    const { id } = req.params;
+    const { id, walletId } = req.params;
     const transaction = await Transaction.findByPk(id);
+    const wallet = await Wallet.findByPk(walletId);
 
     if (!transaction) {
       return res.status(401).json({ error: 'Transaction not found' });
+    }
+
+    if (!wallet) {
+      return res.status(401).json({ error: 'Wallet not found' });
+    }
+
+    if (transaction.type === 'deposit') {
+      const newValue = wallet.total - transaction.value;
+      await wallet.update({ total: newValue });
+    } else {
+      const newValue = wallet.total + transaction.value;
+      await wallet.update({ total: newValue });
     }
 
     await transaction.destroy();

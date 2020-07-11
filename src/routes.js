@@ -30,7 +30,7 @@ routes.get('/transaction/latest', TransactionController.latestTransactions);
 routes.get('/transaction/summary', TransactionController.summary);
 routes.post('/transaction', TransactionController.store);
 routes.put('/transaction/:id', TransactionController.update);
-routes.delete('/transaction/:id', TransactionController.delete);
+routes.delete('/transaction/:walletId/:id', TransactionController.delete);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
