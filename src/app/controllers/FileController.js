@@ -15,8 +15,21 @@ class FileController {
   }
 
   async csvImport(req, res) {
-    const { filename: path } = req.file;
+    const { filename: path, mimetype: ext } = req.file;
+
     const file = resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', path);
+
+    if (ext !== 'text/csv') {
+      const fileExists = await fs.promises.stat(file);
+
+      if (fileExists) {
+        await fs.promises.unlink(file);
+      }
+
+      return res
+        .status(404)
+        .json({ error: 'Invalid file type, allowed formats: ".csv" ' });
+    }
 
     const transactions = await csv().fromFile(file);
 
