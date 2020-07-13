@@ -1,0 +1,11 @@
+title,value,type,wallet_id
+t1,100,deposit,1
+t2,200,deposit,1
+t3,300,deposit,1
+t4,400,deposit,1
+t5,500,deposit,1
+t6,600,deposit,1
+t7,700,deposit,1
+t8,800,deposit,1
+t9,900,deposit,1
+t10,1000,withdraw,1

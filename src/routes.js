@@ -5,6 +5,7 @@ import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
 import WalletController from './app/controllers/WalletController';
 import TransactionController from './app/controllers/TransactionController';
+// eslint-disable-next-line import/no-named-as-default-member
 import FileController from './app/controllers/FileController';
 
 import authMiddleware from './app/middleware/auth';
@@ -33,5 +34,6 @@ routes.put('/transaction/:id', TransactionController.update);
 routes.delete('/transaction/:walletId/:id', TransactionController.delete);
 
 routes.post('/files', upload.single('file'), FileController.store);
+routes.post('/files/csv', upload.single('file'), FileController.csvImport);
 
 export default routes;
