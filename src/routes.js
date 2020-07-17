@@ -15,18 +15,19 @@ const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/session', SessionController.store);
+routes.get('/transaction/latest', TransactionController.latestTransactions);
 
 routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
 routes.get('/wallet', WalletController.index);
+routes.get('/wallet/:id', WalletController.getById);
 routes.post('/wallet', WalletController.store);
 routes.put('/wallet/:id', WalletController.update);
 routes.delete('/wallet/:id', WalletController.delete);
 
 routes.get('/transaction', TransactionController.index);
-routes.get('/transaction/latest', TransactionController.latestTransactions);
 routes.get('/transaction/summary', TransactionController.summary);
 routes.post('/transaction', TransactionController.store);
 routes.put('/transaction/:id', TransactionController.update);

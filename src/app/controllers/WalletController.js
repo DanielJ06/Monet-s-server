@@ -30,6 +30,17 @@ class WalletController {
     return res.json(wallets);
   }
 
+  async getById(req, res) {
+    const { id } = req.params;
+    const wallet = await Wallet.findByPk(id);
+
+    if (!wallet) {
+      return res.status(401).json({ error: 'Wallet not found' });
+    }
+
+    return res.json(wallet);
+  }
+
   async update(req, res) {
     const { id } = req.params;
 
