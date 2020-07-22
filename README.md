@@ -4,7 +4,9 @@
 
 # Monets
  💸 Monet's is a financial manager - have total control of your money 💸
- 
+
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Monet's&uri=https%3A%2F%2Fgithub.com%2FDanielJ06%2FMonet-s-server%2Fblob%2Fmaster%2F.github%2Fdocumentation.json)
+
 [![Author](https://img.shields.io/badge/author-DanielJ06-7FCD91?style=flat-square)](https://github.com/danielj06)
 [![Languages](https://img.shields.io/github/languages/count/DanielJ06/Monet-s-server?color=%7FCD91&style=flat-square)](#)
 
