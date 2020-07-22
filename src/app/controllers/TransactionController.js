@@ -130,6 +130,7 @@ class TransactionController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
+    const { userId } = req;
     const { title, value, type, wallet_id } = req.body;
 
     const walletIsValid = await Wallet.findOne({
@@ -140,6 +141,10 @@ class TransactionController {
 
     if (!walletIsValid) {
       return res.status(401).json({ error: 'Wallet does not exists' });
+    }
+
+    if (walletIsValid.user_id !== userId) {
+      return res.status(401).json({ error: 'Wallet needs to be yours' });
     }
 
     if (type === 'deposit') {
