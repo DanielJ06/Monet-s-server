@@ -7,11 +7,16 @@ import Wallet from '../models/Wallet';
 
 class TransactionController {
   async index(req, res) {
+    const { userId } = req;
     const { walletId } = req.query;
     const wallet = await Wallet.findByPk(walletId);
 
     if (!wallet) {
       return res.status(401).json({ error: 'Wallet not found' });
+    }
+
+    if (wallet.user_id !== userId) {
+      return res.status(401).json({ error: 'Wallet needs to be yours' });
     }
 
     const transactions = await Transaction.findAll({
@@ -30,11 +35,16 @@ class TransactionController {
   }
 
   async latestTransactions(req, res) {
+    const { userId } = req;
     const { walletId } = req.query;
     const wallet = await Wallet.findByPk(walletId);
 
     if (!wallet) {
       return res.status(401).json({ error: 'Wallet not found' });
+    }
+
+    if (wallet.user_id !== userId) {
+      return res.status(401).json({ error: 'Wallet needs to be yours' });
     }
 
     const transactions = await Transaction.findAll({
