@@ -40,7 +40,7 @@ class TransactionController {
     const transactions = await Transaction.findAll({
       where: { wallet_id: walletId },
       order: [['created_at', 'DESC']],
-      limit: 5,
+      limit: 10,
       include: [
         {
           model: Wallet,
